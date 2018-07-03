@@ -44,7 +44,7 @@ This is really all you need to get going.
 import Typed from 'typed.js';
 
 var options = {
-  strings: ["<i>First</i> sentence.", "Second sentence."],
+  strings: ["<i>First</i> sentence.", "&amp; a second sentence."],
   typeSpeed: 40
 }
 
@@ -88,7 +88,7 @@ This allows bots and search engines, as well as users with JavaScript disabled, 
 
 ~~~ javascript
 <script>
-  var typed = new Typed('.element', {
+  var typed = new Typed('#typed', {
     stringsElement: '#typed-strings'
   });
 </script>
@@ -96,7 +96,7 @@ This allows bots and search engines, as well as users with JavaScript disabled, 
 
 ~~~ html
 <div id="typed-strings">
-    <p>Typed.js is an <strong>Awesome</strong> library.</p>
+    <p>Typed.js is a <strong>JavaScript</strong> library.</p>
     <p>It <em>types</em> out sentences.</p>
 </div>
 <span id="typed"></span>
@@ -119,15 +119,26 @@ In the following example, this would only backspace the words after "This is a"
 
 ~~~ javascript
 var typed = new Typed(".element", {
-  // Waits 1000ms after typing "First"
   strings: ["This is a JavaScript library", "This is an ES6 module"],
   smartBackspace: true // Default value
 });
 ~~~
 
+### Bulk Typing
+
+The following example would emulate how a terminal acts when typing a command and seeing its result. 
+
+~~~ javascript
+var typed = new Typed(".element", {
+  strings: [
+    "git push --force ^1000\n `pushed to origin with option force`"
+  ]
+});
+~~~
+
 ### CSS
 
-CSS animations are build upon initialzation in JavaScript. But, you can customize them at your will! These classes are:
+CSS animations are built upon initialzation in JavaScript. But, you can customize them at your will! These classes are:
 ```css
 /* Cursor */
 .typed-cursor {}
@@ -135,6 +146,10 @@ CSS animations are build upon initialzation in JavaScript. But, you can customiz
 /* If fade out option is set */
 .typed-fade-out {}
 ```
+
+### Use with ReactJS
+
+Check out this example React app using Typed.js in a component: https://jsfiddle.net/mattboldt/ovat9jmp/
 
 
 Customization
@@ -287,6 +302,7 @@ var typed = new Typed(".element", {
   onDestroy: (self) => {}
 });
 ~~~
+
 
 ## Contributing
 

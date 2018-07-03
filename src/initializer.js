@@ -20,8 +20,7 @@ export default class Initializer {
       self.el = elementId;
     }
 
-    self.options = {};
-    Object.assign(self.options, defaults, options);
+    self.options = {...defaults, ...options};
 
     // attribute to type into
     self.isInput = self.el.tagName.toLowerCase() === 'input';
@@ -79,9 +78,14 @@ export default class Initializer {
     if (self.stringsElement) {
       self.strings = [];
       self.stringsElement.style.display = 'none';
-      var strings = Array.prototype.slice.apply(self.stringsElement.children);
-      for (let s of strings) {
-        self.strings.push(s.innerHTML.trim());
+      const strings = Array.prototype.slice.apply(self.stringsElement.children);
+      const stringsLength = strings.length;
+
+      if (stringsLength) {
+        for (let i = 0; i < stringsLength; i += 1) {
+          const stringEl = strings[i];
+          self.strings.push(stringEl.innerHTML.trim());
+        }
       }
     }
 
@@ -142,16 +146,22 @@ export default class Initializer {
   }
 
   appendAnimationCss(self) {
+    const cssDataName = 'data-typed-js-css';
     if (!self.autoInsertCss) { return; }
-    if (!self.showCursor || !self.fadeOut) { return; }
+    if (!self.showCursor && !self.fadeOut) { return; }
+    if (document.querySelector(`[${cssDataName}]`)) { return; }
 
     let css = document.createElement('style');
     css.type = 'text/css';
+    css.setAttribute(cssDataName, true);
+
     let innerCss = '';
     if (self.showCursor) {
       innerCss += `
         .typed-cursor{
           opacity: 1;
+        }
+        .typed-cursor.typed-cursor--blink{
           animation: typedjsBlink 0.7s infinite;
           -webkit-animation: typedjsBlink 0.7s infinite;
                   animation: typedjsBlink 0.7s infinite;
@@ -171,14 +181,16 @@ export default class Initializer {
         .typed-fade-out{
           opacity: 0;
           transition: opacity .25s;
+        }
+        .typed-cursor.typed-cursor--blink.typed-fade-out{
           -webkit-animation: 0;
-                  animation: 0;
+          animation: 0;
         }
       `;
     }
     if (css.length === 0) { return; }
     css.innerHTML = innerCss;
-    document.head.appendChild(css);
+    document.body.appendChild(css);
   }
 }
 
